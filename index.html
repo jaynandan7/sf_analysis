@@ -287,13 +287,7 @@ pre code {
       </ul>
       <pre>         
          
-         
-         
-         
-         
-         
-         
-         
+
          
          
          <code>// Line 37
@@ -313,14 +307,7 @@ Opportunity opp = [SELECT AccountId, Amount, CloseDate, CurrencyIsoCode, Id, IsP
       </ul>
       <pre>         
          
-         
-         
-         
-         
-         
-         
-         
-         
+
          
          <code>// Line 35
 update [SELECT Id, FirstName, LastName, Email FROM User WHERE Id = :userId];
@@ -335,13 +322,7 @@ update [SELECT Id, FirstName, LastName, Email FROM User WHERE Id = :userId];
    <li>Implement FLS Checks Using Schema Methods: 
       <pre>         
          
-         
-         
-         
-         
-         
-         
-         
+
          
          
          <code>if (Schema.sObjectType.Opportunity.fields.AccountId.isAccessible()) {
@@ -357,15 +338,7 @@ update [SELECT Id, FirstName, LastName, Email FROM User WHERE Id = :userId];
             <strong>Example:</strong></li>
       </ul>
       <pre>         
-         
-         
-         
-         
-         
-         
-         
-         
-         
+
          
          <code>Opportunity[] opps = [SELECT AccountId, Amount FROM Opportunity WHERE Id = :oppId]; 
 opps = (Opportunity[]) Security.stripInaccessible(AccessType.READABLE, opps).getRecords();
@@ -398,13 +371,7 @@ opps = (Opportunity[]) Security.stripInaccessible(AccessType.READABLE, opps).get
       <pre>         
          
          
-         
-         
-         
-         
-         
-         
-         
+
          
          <code>// Line 15
 delete caseList;
@@ -420,14 +387,7 @@ delete caseList;
       </ul>
       <pre>         
          
-         
-         
-         
-         
-         
-         
-         
-         
+
          
          <code>// Line 19
 delete feedItems;
@@ -439,14 +399,7 @@ delete feedItems;
 <ul>
    <li>Implement CRUD Checks Using Schema Methods: 
       <pre>         
-         
-         
-         
-         
-         
-         
-         
-         
+
          
          
          <code>if (Schema.sObjectType.Case.isDeletable()) {
@@ -488,14 +441,7 @@ delete feedItems;
       </ul>
       <pre>         
          
-         
-         
-         
-         
-         
-         
-         
-         
+
          
          <code>public class BatchPopulatePrimaryContactRoleId implements Database.Batchable&lt;SObject&gt; {
     // No &#39;with sharing&#39; declaration
@@ -512,14 +458,7 @@ delete feedItems;
       </ul>
       <pre>         
          
-         
-         
-         
-         
-         
-         
-         
-         
+
          
          <code>public class SendEmailWithCC {
     // No &#39;with sharing&#39; declaration
@@ -535,12 +474,7 @@ delete feedItems;
       <pre>         
          
          
-         
-         
-         
-         
-         
-         
+ 
          
          
          <code>public with sharing class BatchPopulatePrimaryContactRoleId implements Database.Batchable&lt;SObject&gt; {
@@ -557,14 +491,7 @@ delete feedItems;
       </ul>
       <pre>         
          
-         
-         
-         
-         
-         
-         
-         
-         
+
          
          <code>public inherited sharing class UtilityClass {
     // Class implementation
@@ -594,14 +521,7 @@ delete feedItems;
          <strong>Error Message:</strong></p>
       <pre>         
          
-         
-         
-         
-         
-         
-         
-         
-         
+ 
          
          <code>InternalExecutionError: Path evaluation timed out after 900000 ms
 </code></pre>
@@ -614,13 +534,7 @@ delete feedItems;
          <strong>Error Message:</strong></p>
       <pre>         
          
-         
-         
-         
-         
-         
-         
-         
+
          
          
          <code>ClassCastException: class com.salesforce.graph.vertex.DefaultVertex cannot be cast 
