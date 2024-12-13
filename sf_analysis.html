@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #f9f9f9;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5 {
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+h2 {
+  font-size: 20px;
+  margin-top: 30px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: 20px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: 20px;
+}
+h5 {
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+p, ul, ol {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+ul {
+  margin-left: 20px;
+}
+
+ol {
+  margin-left: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  vertical-align: top;
+}
+
+th {
+  background: #f2f2f2;
+  font-weight: bold;
+}
+
+tr:hover {
+  background: #f5f5f5;
+}
+
+caption {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Styling for code blocks */
+pre {
+  background: #eee;
+  padding: 10px;
+  overflow: auto;
+  font-size: 13px;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+}
+
+/* Pyramid visualization styles */
+.pyramid-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 40px auto;
+  text-align: center;
+  position: relative;
+}
+
+.pyramid-level {
+  margin: 25px auto;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 4px;
+  padding: 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Gradients for pyramid levels */
+.level-profile {
+  width:380px;
+  background: linear-gradient(to top, #4caf50, #72c26b);
+}
+.level-foundation {
+  width:320px;
+  background: linear-gradient(to top, #72c26b, #8cd584);
+}
+.level-team-xtra {
+  width:250px;
+  background: linear-gradient(to top, #8cd584, #a2d399);
+}
+.level-feature-role-integration {
+  width:180px;
+  background: linear-gradient(to top, #a2d399, #c2e6c9);
+}
+.level-custom-permissions {
+  width:120px;
+  background: linear-gradient(to top, #c2e6c9, #e1f5e6);
+}
+
+/* Arrow pointing upward to show hierarchy going bottom to top */
+.arrow {
+  font-size: 20px;
+  color: #555;
+  margin: -10px 0;
+  transform: rotate(180deg); /* Flip arrow to point upwards */
+}
+
+/* Additional notes section styling */
+.hierarchy-explanation {
+  font-size: 14px;
+  margin-top: 20px;
+}
+</style>
+<h1>Technical Analysis of UL Global Salesforce</h1>
+<ol>
+   <li>Introduction</li>
+   <li>Methodology</li>
+   <li>Executive Summary</li>
+   <li>Detailed Analysis 
+      <ul>
+         <li>4.1. Security Violations 
+            <ul>
+               <li>4.1.1. Missing Field-Level Security (FLS) Checks</li>
+               <li>4.1.2. Missing CRUD Checks</li>
+               <li>4.1.3. Missing Sharing Declarations</li>
+            </ul>
+         </li>
+         <li>4.2. Code Quality Issues 
+            <ul>
+               <li>4.2.1. Internal Execution Errors<br/></li>
+            </ul>
+         </li>
+      </ul>
+   </li>
+   <li>Component-wise Analysis</li>
+   <li>Best Practices and Salesforce Documentation References</li>
+   <li>Recommendations<br/></li>
+   <li>Conclusion</li>
+   <li>Appendices 
+      <ul>
+         <li>A. List of Affected Files and Components</li>
+         <li>B. Detailed Violation Tables</li>
+         <li>C. Code Snippets with Violations and Fixes</li>
+         <li>D. References</li>
+      </ul>
+   </li>
+</ol>
+<h2>Introduction</h2>
+<p>This document presents a comprehensive technical analysis of UL Global Salesforce Org, focusing on security vulnerabilities and code quality issues identified through an extensive code review. The primary objective is to highlight areas of concern, understand their impact on the system, and provide actionable recommendations to address these issues.</p>
+<p> 
+   <strong>Target Audience:</strong> TBD</p>
+<h2>Methodology</h2>
+<ul>
+   <li> 
+      <strong>Tool Used:</strong> Salesforce Code Analyzer (sfge)</li>
+   <li> 
+      <strong>Scope of Analysis:</strong> Apex classes and triggers located in 
+      <code>force-app/main/default/classes</code></li>
+   <li> 
+      <strong>Analysis Date:</strong> Nov 2024</li>
+</ul>
+<p>The code analyzer was configured to detect:</p>
+<ul>
+   <li>Field-Level Security (FLS) violations</li>
+   <li>CRUD (Create, Read, Update, Delete) operation checks</li>
+   <li>Sharing rule enforcement</li>
+   <li>Internal execution errors</li>
+</ul>
+<h2>Executive Summary</h2>
+<ul>
+   <li> 
+      <strong>Total Violations Detected:</strong> 373</li>
+   <li> 
+      <strong>Number of Affected Files:</strong> 53</li>
+   <li> 
+      <strong>Key Findings:</strong>
+      <ul>
+         <li>Missing Field-Level Security (FLS) checks</li>
+         <li>Missing CRUD checks</li>
+         <li>Missing sharing declarations (<code>with sharing</code>)</li>
+         <li>Internal execution errors during code analysis</li>
+      </ul>
+   </li>
+</ul>
+<p>These issues pose significant risks to data security and integrity, potentially leading to unauthorized data access and manipulation. Immediate remediation is recommended to align the codebase with Salesforce security best practices.</p>
+<h2>Critical Development Patterns - Summary Table</h2>
+<table>
+   <tbody>
+      <tr>
+         <th>Pattern</th>
+         <th>Approx. Occurrence &amp; Violations</th>
+         <th>Impacted Metadata &amp; Components</th>
+         <th>Overall Impact</th>
+      </tr>
+      <tr>
+         <td>Missing Field-Level Security (FLS) Checks</td>
+         <td>~64% of classes (34/53), ~120+ violations</td>
+         <td> - Standard Objects: Opportunity (fields: AccountId, Amount, CloseDate), User (Email, FirstName, LastName), Case, Contact<br/> - Custom Objects: Non_Conformance__c, Dispute__c, Digital_Content__c<br/> - Example Components: AddressRolesController.cls (Opp fields), MyProfilePageController.cls (User fields), capaResponseFormController.cls (Dispute__c, Non_Conformance__c) </td>
+         <td>High security risk: unauthorized field access/exposure, compliance issues, data integrity problems</td>
+      </tr>
+      <tr>
+         <td>Missing CRUD Checks</td>
+         <td>~55% of classes (29/53), ~90+ violations</td>
+         <td> - Standard Objects: Case (deletion), Opportunity, Lead<br/> - Custom Objects: Non_Conformance__c, Opportunity_Related_Accounts__c<br/> - Example Components: DeleteCases.cls (Case deletion), NonConformanceTriggerHelper.cls (Non_Conformance__c ops), OppRelatedAccounts.cls </td>
+         <td>High risk of unauthorized create/update/delete actions: data integrity and compliance concerns</td>
+      </tr>
+      <tr>
+         <td>Lack of Sharing Enforcement (<code>with sharing</code>)</td>
+         <td>~56% of classes (30/53), ~60+ instances</td>
+         <td> - Standard Objects: Opportunity, Account, Case<br/> - Custom Objects: Non_Conformance__c, Dispute__c<br/> - Example Components: CongaAPICalloutHelper.cls, CHAT_UserSyncAPI.cls </td>
+         <td>Data exposure beyond intended user visibility, non-compliance with principle of least privilege</td>
+      </tr>
+      <tr>
+         <td>Hardcoded Logic in Validation/Workflow Rules</td>
+         <td>~20 occurrences total (validation rules &amp; workflows)</td>
+         <td> - Validation Rules &amp; Workflow Rules on Opportunity, Case, Lead<br/> - Hardcoded profile/role references instead of custom permissions<br/> - Example: Validation rules relying on profile names rather than custom permissions </td>
+         <td>Reduced scalability and maintainability: every org change requires manual updates, slower onboarding of new personas</td>
+      </tr>
+      <tr>
+         <td>Outdated Workflow Rules (Instead of Flows)</td>
+         <td>~8 workflow rules identified for migration</td>
+         <td> - Workflow Rules on Opportunity (e.g., Opp_CloseDate_AutoUpdate), Case, Lead<br/> - Example Components: Case_NewEmail_Alert, Opp_CloseDate_AutoUpdate </td>
+         <td>Limited functionality and technical debt: migrating to Flows improves maintainability, capabilities, and aligns with Salesforce best practices</td>
+      </tr>
+   </tbody>
+</table>
+<div class="summary">
+   <p>
+      <strong>In Summary:</strong><br/> These patterns indicate widespread security vulnerabilities (missing FLS/CRUD checks), data access issues (lack of 
+      <code>with sharing</code>), maintainability challenges (hardcoded logic), and technical debt (outdated workflow rules). Addressing these will enhance the system&#39;s security posture, scalability, and alignment with Salesforce&#39;s future roadmap. </p>
+</div>
+<h2>Detailed Analysis</h2>
+<h3>4.1. Security Violations</h3>
+<h4>4.1.1. Missing Field-Level Security (FLS) Checks</h4>
+<p> 
+   <strong>Overview:</strong></p>
+<p>Field-Level Security (FLS) controls access to individual fields within an object. The absence of FLS checks can lead to unauthorized access or manipulation of sensitive data fields.</p>
+<p> 
+   <strong>Impact:</strong></p>
+<ul>
+   <li>Data Exposure: Users may access or modify fields they shouldn’t.</li>
+   <li>Compliance Risks: Violates Salesforce security guidelines and may breach data protection regulations.</li>
+</ul>
+<p> 
+   <strong>Examples:</strong></p>
+<ol>
+   <li> 
+      <em>AddressRolesController.cls</em>
+      <ul>
+         <li> 
+            <strong>Violation:</strong> FLS checks missing for fields on the Opportunity object.</li>
+         <li> 
+            <strong>Code Reference:</strong></li>
+      </ul>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>// Line 37
+Opportunity opp = [SELECT AccountId, Amount, CloseDate, CurrencyIsoCode, Id, IsPrivate, Name, Split_Billing_Opp__c 
+                   FROM Opportunity WHERE Id = :oppId];
+</code></pre>
+      <p> 
+         <strong>Fields Accessed Without FLS Checks:</strong> AccountId, Amount, CloseDate, CurrencyIsoCode, IsPrivate, Split_Billing_Opp__c</p>
+   </li>
+   <li> 
+      <em>MyProfilePageController.cls</em>
+      <ul>
+         <li> 
+            <strong>Violation:</strong> FLS checks missing when reading and updating User fields.</li>
+         <li> 
+            <strong>Code Reference:</strong></li>
+      </ul>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>// Line 35
+update [SELECT Id, FirstName, LastName, Email FROM User WHERE Id = :userId];
+</code></pre>
+      <p> 
+         <strong>Fields Accessed Without FLS Checks:</strong> FirstName, LastName, Email</p>
+   </li>
+</ol>
+<p> 
+   <strong>Recommendations:</strong></p>
+<ul>
+   <li>Implement FLS Checks Using Schema Methods: 
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>if (Schema.sObjectType.Opportunity.fields.AccountId.isAccessible()) {
+    // Access AccountId safely
+}
+</code></pre>
+   </li>
+   <li>Use 
+      <code>Security.stripInaccessible()</code>: 
+      <ul>
+         <li>Introduced in API version 45.0, this method can be used to remove fields the user doesn’t have access to.</li>
+         <li> 
+            <strong>Example:</strong></li>
+      </ul>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>Opportunity[] opps = [SELECT AccountId, Amount FROM Opportunity WHERE Id = :oppId]; 
+opps = (Opportunity[]) Security.stripInaccessible(AccessType.READABLE, opps).getRecords();
+</code></pre>
+   </li>
+</ul>
+<p> 
+   <strong>Salesforce Reference:</strong><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_perms_enforcing.htm">Enforcing CRUD and FLS</a></p>
+<h4>4.1.2. Missing CRUD Checks</h4>
+<p> 
+   <strong>Overview:</strong></p>
+<p>CRUD checks ensure that users have the necessary permissions to perform operations on an object (Create, Read, Update, Delete). Missing these checks can result in unauthorized data manipulation.</p>
+<p> 
+   <strong>Impact:</strong></p>
+<ul>
+   <li>Unauthorized Data Manipulation: Users might create, update, or delete records without proper permissions.</li>
+   <li>Data Integrity Issues: May lead to inconsistent or corrupted data.</li>
+</ul>
+<p> 
+   <strong>Examples:</strong></p>
+<ol>
+   <li> 
+      <em>DeleteCases.cls</em>
+      <ul>
+         <li> 
+            <strong>Violation:</strong> Deleting cases without checking if the user has delete permission.</li>
+         <li> 
+            <strong>Code Reference:</strong></li>
+      </ul>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>// Line 15
+delete caseList;
+</code></pre>
+   </li>
+   <li> 
+      <em>CHAT_InboundChatterFeedComment.cls</em>
+      <ul>
+         <li> 
+            <strong>Violation:</strong> Deleting FeedItem and FeedComment records without CRUD checks.</li>
+         <li> 
+            <strong>Code Reference:</strong></li>
+      </ul>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>// Line 19
+delete feedItems;
+</code></pre>
+   </li>
+</ol>
+<p> 
+   <strong>Recommendations:</strong></p>
+<ul>
+   <li>Implement CRUD Checks Using Schema Methods: 
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>if (Schema.sObjectType.Case.isDeletable()) {
+    delete caseList;
+}
+</code></pre>
+   </li>
+   <li>Leverage 
+      <code>with sharing</code> Classes: 
+      <ul>
+         <li>Ensure that classes enforce sharing rules, which include CRUD permissions.</li>
+      </ul>
+   </li>
+</ul>
+<p> 
+   <strong>Salesforce Documentation Reference:</strong><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_perms_enforcing.htm">CRUD and FLS Enforcement in Apex</a></p>
+<h4>4.1.3. Missing Sharing Declarations</h4>
+<p> 
+   <strong>Overview:</strong></p>
+<p>Classes without explicit sharing declarations default to 
+   <em>without sharing</em>, which means they run in system context and do not enforce the current user’s sharing rules.</p>
+<p> 
+   <strong>Impact:</strong></p>
+<ul>
+   <li>Data Exposure: Users can access data they shouldn’t see.</li>
+   <li>Security Compliance Issues: Violates the principle of least privilege.</li>
+</ul>
+<p> 
+   <strong>Examples:</strong></p>
+<ol>
+   <li> 
+      <em>BatchPopulatePrimaryContactRoleId.cls</em>
+      <ul>
+         <li> 
+            <strong>Violation:</strong> Class performs database operations without 
+            <code>with sharing</code>.</li>
+         <li> 
+            <strong>Code Reference:</strong></li>
+      </ul>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>public class BatchPopulatePrimaryContactRoleId implements Database.Batchable&lt;SObject&gt; {
+    // No &#39;with sharing&#39; declaration
+}
+</code></pre>
+   </li>
+   <li> 
+      <em>SendEmailWithCC.cls</em>
+      <ul>
+         <li> 
+            <strong>Violation:</strong> Missing sharing declaration while performing database queries.</li>
+         <li> 
+            <strong>Code Reference:</strong></li>
+      </ul>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>public class SendEmailWithCC {
+    // No &#39;with sharing&#39; declaration
+}
+</code></pre>
+   </li>
+</ol>
+<p> 
+   <strong>Recommendations:</strong></p>
+<ul>
+   <li>Declare Classes with 
+      <code>with sharing</code>: 
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>public with sharing class BatchPopulatePrimaryContactRoleId implements Database.Batchable&lt;SObject&gt; {
+    // Class implementation
+}
+</code></pre>
+   </li>
+   <li>Use 
+      <code>inherited sharing</code>: 
+      <ul>
+         <li>For utility classes called by both with and without sharing contexts.</li>
+         <li> 
+            <strong>Example:</strong></li>
+      </ul>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>public inherited sharing class UtilityClass {
+    // Class implementation
+}
+</code></pre>
+   </li>
+</ul>
+<p> 
+   <strong>Salesforce Documentation Reference:</strong><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_keywords_sharing.htm">Using the with sharing or without sharing Keywords</a></p>
+<h3>4.2. Code Quality Issues</h3>
+<h4>4.2.1. Internal Execution Errors</h4>
+<p> 
+   <strong>Overview:</strong></p>
+<p>Internal execution errors occur when the code analyzer cannot process certain code paths, often due to complex logic or timeouts.</p>
+<p> 
+   <strong>Impact:</strong></p>
+<ul>
+   <li>Undetected Issues: Potentially masks other security or performance issues.</li>
+   <li>Analysis Incomplete: Full code coverage not achieved during analysis.</li>
+</ul>
+<p> 
+   <strong>Examples:</strong></p>
+<ol>
+   <li> 
+      <em>OpportunityHelper.cls</em>
+      <p> 
+         <strong>Error Message:</strong></p>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>InternalExecutionError: Path evaluation timed out after 900000 ms
+</code></pre>
+      <p> 
+         <strong>Possible Causes:</strong> Complex recursive methods, large loops without exit conditions.</p>
+   </li>
+   <li> 
+      <em>EmailIdsProcessing.cls</em>
+      <p> 
+         <strong>Error Message:</strong></p>
+      <pre>         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         <code>ClassCastException: class com.salesforce.graph.vertex.DefaultVertex cannot be cast 
+to class com.salesforce.graph.vertex.VariableExpressionVertex
+</code></pre>
+      <p> 
+         <strong>Possible Causes:</strong> Improper type casting, complex method chains.</p>
+   </li>
+</ol>
+<p> 
+   <strong>Recommendations:</strong></p>
+<ul>
+   <li> 
+      <strong>Review and Optimize Code:</strong>
+      <ul>
+         <li>Refactor complex methods into smaller, manageable units.</li>
+         <li>Ensure all loops have proper exit conditions.</li>
+      </ul>
+   </li>
+   <li> 
+      <strong>Update Code Analyzer:</strong> Ensure the latest version is used to benefit from performance improvements.</li>
+   <li> 
+      <strong>Handle Exceptions Properly:</strong> Implement robust error handling to prevent unexpected behavior.</li>
+</ul>
+<h2>Component-wise Analysis</h2>
+<p>Affected Classes and Components</p>
+<p>The following is a detailed breakdown of the affected components, including the specific violations and impacted metadata.</p>
+<table>
+   <caption>Table 1: Affected Apex Classes and Violations</caption>
+   <thead>
+      <tr>
+         <th>File Name</th>
+         <th>Violation Detected</th>
+         <th>Metadata Impacted</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>AddressRolesController.cls</td>
+         <td>10</td>
+         <td>Account &amp; Opportunity Fields, Page Layouts</td>
+      </tr>
+      <tr>
+         <td>AuditInspectionFormController.cls</td>
+         <td>7</td>
+         <td>Non_Conformance__c Fields, Validation Rules</td>
+      </tr>
+      <tr>
+         <td>AuditInspectionFormMobileController.cls</td>
+         <td>4</td>
+         <td>WorkOrderLineItem Fields, Mobile Page Layouts</td>
+      </tr>
+   </tbody>
+</table>
+<p> 
+   <strong>Some metadata References:</strong></p>
+<ul>
+   <li> 
+      <strong>Custom Objects:</strong> Non_Conformance__c, Dispute__c, Review_Approval_Process__c, Opportunity_Account_Roles__c</li>
+   <li> 
+      <strong>Standard Objects:</strong> Opportunity, Account, User, Case, FeedItem, ContentDocument</li>
+   <li> 
+      <strong>Fields with Violations:</strong> Opportunity.AccountId, User.Email, Case.Status, Non_Conformance__c.Status__c</li>
+</ul>
+<h2>Best Practices and Salesforce Documentation References</h2>
+<ol>
+   <li> 
+      <strong>Enforcing FLS and CRUD Checks</strong>
+      <ul>
+         <li>Use Schema Describe Methods: 
+            <code>isAccessible()</code>, 
+            <code>isCreateable()</code>, 
+            <code>isUpdateable()</code>, 
+            <code>isDeleteable()</code></li>
+         <li> 
+            <strong>Reference:</strong><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_perms_enforcing.htm">Enforcing CRUD and FLS</a></li>
+      </ul>
+   </li>
+   <li> 
+      <strong>Using with sharing Keyword</strong>
+      <ul>
+         <li>Ensure Classes Respect Sharing Rules: Apply 
+            <code>with sharing</code> to classes that perform database operations.</li>
+         <li> 
+            <strong>Reference:</strong><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_keywords_sharing.htm">Using the with sharing or without sharing Keywords</a></li>
+      </ul>
+   </li>
+   <li> 
+      <strong>Error Handling</strong>
+      <ul>
+         <li>Implement Try-Catch Blocks: Catch exceptions to prevent unhandled errors.</li>
+         <li>Use Custom Exception Classes: Provide meaningful error messages and handle specific error types.</li>
+         <li> 
+            <strong>Reference:</strong><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_exception_handling.htm">Apex Exception Handling</a></li>
+      </ul>
+   </li>
+   <li> 
+      <strong>Code Optimization</strong>
+      <ul>
+         <li>Refactor Complex Methods: Break down large methods into smaller, reusable functions.</li>
+         <li>Avoid Deep Nesting: Simplify conditional statements and loops.</li>
+         <li> 
+            <strong>Reference:</strong><a href="https://developer.salesforce.com/forums/?id=906F00000009CjlIAE">Apex Code Best Practices</a></li>
+      </ul>
+   </li>
+</ol>
+<div>
+   <h3>Recommendations</h3>
+   <h4>1. Migrate Workflow Rules to Flows</h4>
+   <p> 
+      <strong>Current State:</strong></p>
+   <ul>
+      <li>A handful of 
+         <strong>Workflow Rules</strong> were originally implemented to perform simple field updates, email alerts, or task assignments.</li>
+      <li>Several 
+         <strong>Validation Rules</strong> are currently hard-coded to reference specific profiles, roles, or conditions that could be simplified by using custom permissions or by centralizing logic within Flows.</li>
+   </ul>
+   <p> 
+      <strong>Risks &amp; Limitations of the Current Approach:</strong></p>
+   <ul>
+      <li> 
+         <strong>Workflow Rules</strong> offer limited functionality compared to Flows. They cannot orchestrate complex multi-step logic, branching, or handle multiple scenarios as elegantly as a Flow can.</li>
+      <li>As Salesforce deprecates Workflow Rules and Process Builder in favor of Flows, continuing to rely on them increases the risk of technical debt and may complicate future maintenance.</li>
+      <li> 
+         <strong>Validation Rules</strong> that hardcode conditions based on profiles or persona names lead to less flexible logic. Whenever a new persona or profile is introduced or modified, the validation rules must be manually updated.</li>
+   </ul>
+   <p> 
+      <strong>Recommendations:</strong></p>
+   <ol>
+      <li> 
+         <strong>Migrate Workflow Rules to Flows:</strong>
+         <ul>
+            <li>Identify all workflow rules discovered in your initial sheet.</li>
+            <li>Rebuild their logic using 
+               <strong>Record-Triggered Flows</strong> or 
+               <strong>Scheduled Flows</strong>.</li>
+            <li>Consolidate multiple workflow rules acting on the same object into a single Flow with decision elements for clearer logic and maintainability.</li>
+         </ul>
+      </li>
+      <li> 
+         <strong>Refactor Validation Rules to Use Custom Permissions:</strong>
+         <ul>
+            <li>Replace profile or persona name checks with a custom permission assigned through permission sets.</li>
+            <li>Update the validation rules to reference 
+               <code>$Permission.Custom_Permission_Name</code> instead of hardcoded conditions.</li>
+            <li>This makes it easier to control who is exempt from or subject to certain validations simply by adjusting permission assignments rather than rewriting logic.</li>
+         </ul>
+      </li>
+      <li> 
+         <strong>Align with Modern Automation Standards:</strong>
+         <ul>
+            <li>Utilize Flows as the central point for future automations, as recommended by Salesforce.</li>
+            <li>Incorporate Flow Test features (available in newer Salesforce releases) to ensure quality and reduce regression issues when automation changes occur.</li>
+         </ul>
+      </li>
+   </ol>
+   <h4> 
+      <strong>Workflow Rules Identified for Migration to Flow</strong></h4>
+   <table border="1" cellpadding="5" cellspacing="0">
+      <thead>
+         <tr>
+            <th>Workflow Rule Name</th>
+            <th>Object</th>
+            <th>Criteria/Condition</th>
+            <th>Current Actions (e.g., Field Update, Email Alert, Task)</th>
+            <th>Recommended Flow Type</th>
+            <th>Additional Notes</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td>Opp_CloseDate_AutoUpdate</td>
+            <td>Opportunity</td>
+            <td>IF Stage = ‘Proposal/Price Quote’ AND CloseDate &lt; TODAY()</td>
+            <td>Field Update: CloseDate set to TODAY()+7</td>
+            <td>Record-Triggered Flow (After Save)</td>
+            <td>In the Flow, use a Decision element to check stage and date; then update CloseDate.</td>
+         </tr>
+         <tr>
+            <td>Case_NewEmail_Alert</td>
+            <td>Case</td>
+            <td>IF Case Origin = ‘Email’ AND Status = ‘New’</td>
+            <td>Email Alert: Notify Case Owner and Support Queue</td>
+            <td>Record-Triggered Flow (After Save)</td>
+            <td>Flow can send an email alert using Email Alert actions or Send Email core action.</td>
+         </tr>
+         <tr>
+            <td>Lead_Assignment_Task</td>
+            <td>Lead</td>
+            <td>IF Lead Source = ‘Trade Show’</td>
+            <td>Task Creation: Create Follow-Up Task assigned to Lead Owner</td>
+            <td>Record-Triggered Flow (Before Save or After Save)</td>
+            <td>Flow can create a follow-up Task using a Create Records element.</td>
+         </tr>
+         <tr>
+            <td>Account_Billing_Update</td>
+            <td>Account</td>
+            <td>IF Billing Country = ‘US’ AND AnnualRevenue &gt; 500000</td>
+            <td>Field Update: Set Billing Priority = ‘High’</td>
+            <td>Record-Triggered Flow (After Save)</td>
+            <td>Flow can check conditions and update the Billing Priority field directly.</td>
+         </tr>
+         <tr>
+            <td>Contact_Notify_Sales</td>
+            <td>Contact</td>
+            <td>IF Contact Title = ‘Director’ OR ‘VP’</td>
+            <td>Email Alert: Send notification to Sales Manager</td>
+            <td>Record-Triggered Flow (After Save)</td>
+            <td>Use a Decision element in Flow to identify the title and send an email via Email Alert action.</td>
+         </tr>
+         <tr>
+            <td>Opp_Stage_NotifyFinance</td>
+            <td>Opportunity</td>
+            <td>IF Stage changes from ‘Negotiation/Review’ to ‘Closed Won’</td>
+            <td>Email Alert: Notify Finance Team</td>
+            <td>Record-Triggered Flow (After Save)</td>
+            <td>Flow can detect stage change using a prior value check, then send an alert to Finance.</td>
+         </tr>
+         <tr>
+            <td>Case_HighPriority_Owner</td>
+            <td>Case</td>
+            <td>IF Priority = ‘High’ AND Status = ‘New’</td>
+            <td>Field Update: Reassign Owner to High-Priority Queue</td>
+            <td>Record-Triggered Flow (After Save)</td>
+            <td>Flow checks conditions and updates the OwnerId field accordingly.</td>
+         </tr>
+         <tr>
+            <td>Lead_Marketing_Nurture</td>
+            <td>Lead</td>
+            <td>IF Lead Score &gt; 75 AND Lead Source != ‘Referral’</td>
+            <td>Field Update: Set Nurture_Level__c = ‘A’</td>
+            <td>Record-Triggered Flow (After Save)</td>
+            <td>Flow decision node checks score and source, updates Nurture_Level__c field.</td>
+         </tr>
+      </tbody>
+   </table>
+   <p> 
+      <strong>Key Migration Points:</strong></p>
+   <ul>
+      <li> 
+         <strong>Use Record-Triggered Flows:</strong>
+         <ul>
+            <li>Each workflow rule can be translated into a Record-Triggered Flow.</li>
+            <li> 
+               <em>Criteria Handling:</em> Replace workflow criteria with Flow Decision elements.</li>
+            <li> 
+               <em>Actions:</em> Use Flow’s Update Records, Create Records, and Send Email actions to replicate or improve upon workflow actions.</li>
+         </ul>
+      </li>
+      <li> 
+         <strong>Avoid Hardcoding Profiles/Conditions:</strong>
+         <ul>
+            <li>If any workflow logic references profiles or record types indirectly, consider using custom permissions or Flow formulas for more scalable solutions.</li>
+         </ul>
+      </li>
+      <li> 
+         <strong>Test Each Migrated Flow:</strong>
+         <ul>
+            <li>After implementing each previously workflow-based scenario in Flow, thoroughly test them in a sandbox. Validate conditions, actions, and user notifications.</li>
+         </ul>
+      </li>
+   </ul>
+   <h4> 
+      <strong>2. Defect Register (Potential Defects Identified)</strong></h4>
+   <table border="1" cellpadding="5" cellspacing="0">
+      <thead>
+         <tr>
+            <th>Defect ID</th>
+            <th>Component (File Name)</th>
+            <th>Type of Defect</th>
+            <th>Description / Actual Data Reason</th>
+            <th>Potential Impact</th>
+            <th>Recommended Action</th>
+            <th>Priority</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td>D-001</td>
+            <td>AddressRolesController.cls</td>
+            <td>Missing FLS Check</td>
+            <td>Fields on Opportunity (AccountId, Amount, CloseDate) accessed without verifying user’s field-level security permissions.</td>
+            <td>Users may view/modify sensitive financial data without proper authorization</td>
+            <td>Implement Schema.sObjectType.Opportunity.fields.*.isAccessible() checks. Use Security.stripInaccessible() for field filtering.</td>
+            <td>High</td>
+         </tr>
+         <tr>
+            <td>D-002</td>
+            <td>MyProfilePageController.cls</td>
+            <td>Missing FLS Check</td>
+            <td>User fields (Email, FirstName, LastName) updated without confirming the user has update permission on these fields.</td>
+            <td>Unauthorized updates to user details could breach user data integrity</td>
+            <td>Add FLS checks before updating User fields. Ensure isUpdateable() is checked for User object.</td>
+            <td>High</td>
+         </tr>
+         <tr>
+            <td>D-003</td>
+            <td>capaResponseFormController.cls</td>
+            <td>Missing CRUD Check</td>
+            <td>Dispute__c and Non_Conformance__c records manipulated without verifying create/update permissions.</td>
+            <td>Potential data integrity issue if unauthorized create/update occurs</td>
+            <td>Use Schema.sObjectType.Dispute__c.isUpdateable() and isCreateable() checks before DML ops.</td>
+            <td>High</td>
+         </tr>
+         <tr>
+            <td>D-004</td>
+            <td>NonConformanceTriggerHelper.cls</td>
+            <td>Missing CRUD &amp; FLS Checks</td>
+            <td>Non_Conformance__c fields updated without CRUD/FLS checks, risking unauthorized data changes.</td>
+            <td>Users may alter critical compliance-related data</td>
+            <td>Add with sharing, FLS checks, and CRUD checks. Consider a TriggerHandler pattern for maintainability.</td>
+            <td>High</td>
+         </tr>
+         <tr>
+            <td>D-005</td>
+            <td>OppRelatedAccounts.cls</td>
+            <td>Hardcoded Conditions</td>
+            <td>Workflow logic and references in validation rules hardcode certain profile or role names, making changes cumbersome.</td>
+            <td>Reduced scalability and maintainability, longer time to onboard new personas</td>
+            <td>Replace profile-based logic in validation rules with Custom Permissions. Use persona-based permission sets.</td>
+            <td>Medium</td>
+         </tr>
+         <tr>
+            <td>D-006</td>
+            <td>DeleteCases.cls</td>
+            <td>Missing CRUD Check</td>
+            <td>Deleting Case records without checking Case.isDeletable() permission first.</td>
+            <td>Unauthorized deletions may remove critical support records</td>
+            <td>Implement CRUD checks before performing DML. If insufficient permission, handle gracefully.</td>
+            <td>High</td>
+         </tr>
+         <tr>
+            <td>D-007</td>
+            <td>DigitalContentController.cls</td>
+            <td>Missing FLS Checks</td>
+            <td>Digital_Content__c fields (Asset_File_Name__c, Asset_Link__c) accessed without confirming FLS.</td>
+            <td>Potential exposure of internal content links/data</td>
+            <td>Integrate Security.stripInaccessible() and field-level accessible checks.</td>
+            <td>Medium</td>
+         </tr>
+         <tr>
+            <td>D-008</td>
+            <td>CongaAPICalloutHelper.cls</td>
+            <td>Missing CRUD/FLS Checks</td>
+            <td>Error_Log__c and WorkOrderLineItem fields manipulated without FLS/CRUD checks.</td>
+            <td>Invalid record changes and data exposure risk</td>
+            <td>Check FLS and CRUD before data operations. Add with sharing where appropriate.</td>
+            <td>High</td>
+         </tr>
+         <tr>
+            <td>D-009</td>
+            <td>NonConformanceDisputeCreation.cls</td>
+            <td>Hardcoded Conditions, Missing FLS</td>
+            <td>Validation rules and record updates rely on profiles and do not confirm field accessibility on Non_Conformance__c and Dispute__c.</td>
+            <td>Time-consuming maintenance and possible unauthorized data access</td>
+            <td>Migrate logic to Custom Permissions, apply FLS checks for fields.</td>
+            <td>High</td>
+         </tr>
+         <tr>
+            <td>D-010</td>
+            <td>Various Apex Classes/Triggers (General)</td>
+            <td>Lack of Sharing Enforcement</td>
+            <td>Many classes lack with sharing, allowing system context operations ignoring user permissions/sharing rules.</td>
+            <td>Data exposure and non-compliance with security best practices</td>
+            <td>Add with sharing to classes that perform database operations.</td>
+            <td>High</td>
+         </tr>
+         <tr>
+            <td>D-011</td>
+            <td>Workflow Rules (Multiple)</td>
+            <td>Outdated Automation</td>
+            <td>Multiple workflow rules performing simple field updates or email alerts should be migrated to Flows.</td>
+            <td>Limited functionality and technical debt as Salesforce deprecates Workflow Rules</td>
+            <td>Convert workflow rules to record-triggered Flows. Consolidate logic and enable easier maintenance.</td>
+            <td>Medium</td>
+         </tr>
+         <tr>
+            <td>D-012</td>
+            <td>Validation Rules (Multiple)</td>
+            <td>Hardcoded Profile Logic</td>
+            <td>Validation rules referencing specific profiles/roles, making future changes harder.</td>
+            <td>Less agile system; longer time to roll out new personas or rules</td>
+            <td>Replace profile checks with custom permissions. Reuse persona-based access patterns.</td>
+            <td>Medium</td>
+         </tr>
+         <tr>
+            <td>D-013</td>
+            <td>NonConformanceTriggerHelper.cls (example)</td>
+            <td>Code Complexity</td>
+            <td>Triggers handle complex logic without a standardized pattern (TriggerHandler), reducing maintainability and testability.</td>
+            <td>Harder to debug/enhance, risk of governor limits exceeded</td>
+            <td>Implement a standardized Trigger Handler framework, break logic into smaller classes, improve test coverage.</td>
+            <td>Medium</td>
+         </tr>
+         <tr>
+            <td>D-014</td>
+            <td>Integration Xtra Access (General)</td>
+            <td>Overly Broad Access</td>
+            <td>Integration permission sets not isolated, risking excessive privileges to integrations.</td>
+            <td>Potential data leaks or unintended modifications by integrations</td>
+            <td>Create dedicated Integration Xtra permission sets with minimal access.</td>
+            <td>Medium</td>
+         </tr>
+      </tbody>
+   </table>
+   <p> 
+      <strong>Additional Notes:</strong></p>
+   <ul>
+      <li> 
+         <em>Impact and Priority Rationale:</em> High-priority defects typically involve security risks (uncontrolled data exposure, no CRUD/FLS checks) or compliance issues. Medium priority defects concern maintainability and scalability.</li>
+      <li> 
+         <em>Tracking and Resolution:</em> Each defect should be tracked in a defect management system. Over time, improvements can be measured by KPIs such as test coverage increases, reduction in hardcoded logic, and fewer data access incidents.</li>
+   </ul>
+   <p>This defect list provides a starting point for a remediation roadmap, ensuring that all identified issues from the code analysis are documented, prioritized, and addressed.</p>
+   <h4>3. Adopt Persona-Based Security Design </h4>
+   <p>Based on Security design patterns, we can enhance our current security architecture by leveraging Profiles, Personas, Permission Sets, and Permission Set Groups in a layered approach. This model reduces redundancy, improves scalability, and simplifies maintenance by separating system-level permissions from field and object access, and by using personas to define more granular access.</p>
+   <h5>Key Concepts</h5>
+   <table border="1" cellpadding="5" cellspacing="0">
+      <thead>
+         <tr>
+            <th>Concept</th>
+            <th>Definition</th>
+            <th>Role in Security Design</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td>
+               <strong>Profile</strong></td>
+            <td>Groups users by business unit (e.g., Sales, Services, Renewals). Does not control field-level security or object permissions, but provides system permissions and record page assignments based on record type.</td>
+            <td>Establishes a broad functional boundary (e.g., Sales profile) and high-level system permissions. All Sales users share the same profile but differ in their day-to-day functional access through permission sets.</td>
+         </tr>
+         <tr>
+            <td>
+               <strong>Persona</strong></td>
+            <td>A sub-category within a business unit defining what tasks a group of users need to perform (e.g., &quot;Sales Renewal Specialist&quot; within the Sales business unit).</td>
+            <td>Refines access beyond what the profile grants. Different personas within the same profile have varying data access and functional rights tailored to their role.</td>
+         </tr>
+         <tr>
+            <td>
+               <strong>Permission Set Group (PSG)</strong></td>
+            <td>Maps a persona to a collection of permission sets. Assigning a PSG to a user automatically grants the correct combination of baseline and extra permissions needed for that persona.</td>
+            <td>Simplifies user management. Instead of assigning multiple individual permission sets, admins assign one PSG per persona.</td>
+         </tr>
+         <tr>
+            <td>
+               <strong>Permission Set</strong></td>
+            <td>Modular building blocks defining object access, field-level security, and additional capabilities. Several types include Foundation, Team Xtra, Feature Xtra, Role Xtra, and Integration Xtra.</td>
+            <td>Ensures minimal overlap and maintenance overhead. Foundation sets provide baseline access; Xtra sets layer on additional, persona-specific or feature-specific access.</td>
+         </tr>
+         <tr>
+            <td>
+               <strong>Custom Permissions</strong></td>
+            <td>Fine-grained flags that can be assigned via profiles or permission sets, enabling or restricting certain features without hardcoding logic in validation rules or page layouts.</td>
+            <td>Improves flexibility and reduces the need to modify code or rules when adding a new persona or changing conditions. Enhances scalability and minimizes maintenance effort.</td>
+         </tr>
+      </tbody>
+   </table>
+   <p>Below is a pyramid-style representation of the proposed security architecture. From bottom to top, we move from broad business units (Profiles) to increasingly granular permissions (Foundation, Team Xtra, Feature/Role/Integration Xtra), and finally to the most flexible and minimal layer at the top (Custom Permissions).</p>
+   <div class="pyramid-container">
+      <div class="pyramid-level level-custom-permissions"> Custom Permissions </div>
+      <div class="arrow">▲</div>
+      <div class="pyramid-level level-feature-role-integration"> Feature / Role / Integration Xtra PS </div>
+      <div class="arrow">▲</div>
+      <div class="pyramid-level level-team-xtra"> Team Xtra (Persona-Specific PS) </div>
+      <div class="arrow">▲</div>
+      <div class="pyramid-level level-foundation"> Foundation Permission Sets </div>
+      <div class="arrow">▲</div>
+      <div class="pyramid-level level-profile"> Profile (Business Unit) </div>
+   </div>
+   <h5>Scenerio/ Example</h5>
+   <p> Consider a scenario in the Sales organization: </p>
+   <ul>
+      <li>
+         <strong>Profile:</strong> &quot;Sales Profile&quot; grants system-level permissions relevant to all Sales users (e.g., API access, ability to use certain standard objects), and assigns the main Sales page layouts.</li>
+      <li>
+         <strong>Persona:</strong> Within Sales, we have a &quot;Renewal Specialist Persona&quot; who needs to edit certain contract fields and has access to renewal-related records. Another persona, &quot;Key Account Manager,&quot; requires extra access to strategic account data.</li>
+      <li>
+         <strong>Permission Set Groups:</strong> 
+         <ul>
+            <li>
+               <strong>Renewal Specialist PSG:</strong> Bundles the Foundation PS (for Sales) plus a Team Xtra PS that grants edit rights to renewal fields on Opportunity and a Feature Xtra PS to access a premium forecasting tool. Users assigned this PSG get all needed rights with one assignment.</li>
+            <li>
+               <strong>Key Account Manager PSG:</strong> Combines the same Foundation PS (all Sales get baseline fields) with a different Team Xtra PS granting access to high-value account fields and a Feature Xtra PS for strategic account insights.</li>
+         </ul>
+      </li>
+      <li>
+         <strong>Permission Sets:</strong> 
+         <ul>
+            <li>
+               <strong>Foundation PS (Sales Foundation):</strong> Grants read access to core objects like Opportunities, Contacts. Every Sales user has this.</li>
+            <li>
+               <strong>Team Xtra (Renewal Xtra):</strong> Just the extra edit rights on renewal fields of Opportunity. Lightweight and persona-specific.</li>
+            <li>
+               <strong>Feature Xtra (Forecasting):</strong> Grants access to forecasting features. Multiple personas can share this without duplicating baseline access.</li>
+            <li>
+               <strong>Role Xtra:</strong> Used if only some members of the persona need extra access—assigned manually to those few users.</li>
+            <li>
+               <strong>Integration Xtra:</strong> A separate permission set for integrations like an ERP connector that needs read/write on certain objects but should not impact user access.</li>
+         </ul>
+      </li>
+      <li>
+         <strong>Custom Permissions:</strong> Instead of hardcoding profile names in a validation rule that exempts Renewal Specialists from certain checks, assign a custom permission (e.g., &quot;Can_Bypass_Validation&quot;) to the Renewal PSG. Validation rules now reference 
+         <code>$Permission.Can_Bypass_Validation</code>, making adding a new persona easy—just assign the same custom permission rather than altering the validation rule.</li>
+   </ul>
+   <h5>Benefits of This Approach</h5>
+   <ul>
+      <li>
+         <strong>Scalability:</strong> Adding a new persona requires creating or adjusting a Permission Set Group rather than modifying multiple validation rules or profiles.</li>
+      <li>
+         <strong>Maintainability:</strong> Baseline changes (like adding a new field to all Sales users) require updating only the Foundation PS, not each persona’s Team Xtra PS.</li>
+      <li>
+         <strong>Flexibility:</strong> Custom permissions simplify conditional logic in pages and validation rules, avoiding hardcoding of profiles or roles.</li>
+      <li>
+         <strong>Reduced Technical Debt:</strong> Keeping profiles lean and using persona-based PSGs and permission sets reduces complexity and improves long-term manageability.</li>
+   </ul>
+</div>
+<h2>Conclusion</h2>
+<p>The analysis highlights critical security and code quality issues within the Salesforce codebase that require prompt attention. Addressing these issues will significantly improve the application’s security posture, ensure compliance with Salesforce best practices, and enhance overall system reliability.</p>
+<h2>Appendices</h2>
+<h3>Appendix A: List of Affected Files and Components</h3>
+<p>Below is the comprehensive table listing all affected files, the type of violations, and impacted metadata without any omissions.</p>
+<table> 
+   <caption>Table 2: List of Affected Files</caption> 
+   <thead>
+      <tr>
+         <th>File Name</th>
+         <th>Violation Detected</th>
+         <th>Metadata Impacted</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>AddressRolesController.cls</td>
+         <td>10</td>
+         <td>Account &amp; Opportunity Fields, Page Layouts</td>
+      </tr>
+      <tr>
+         <td>AuditInspectionFormController.cls</td>
+         <td>7</td>
+         <td>Non_Conformance__c Fields, Validation Rules</td>
+      </tr>
+      <tr>
+         <td>AuditInspectionFormMobileController.cls</td>
+         <td>4</td>
+         <td>WorkOrderLineItem Fields, Mobile Page Layouts</td>
+      </tr>
+      <tr>
+         <td>BatchPopulatePrimaryContactRoleId.cls</td>
+         <td>7</td>
+         <td>Opportunity Fields, Contact Fields</td>
+      </tr>
+      <tr>
+         <td>BatchUpdateInventoryFields.cls</td>
+         <td>6</td>
+         <td>Purchased_Item__c Fields, Custom Metadata Types</td>
+      </tr>
+      <tr>
+         <td>capaResponseFormController.cls</td>
+         <td>37</td>
+         <td>Dispute__c, Non_Conformance__c Fields, Custom Permissions</td>
+      </tr>
+      <tr>
+         <td>CaseAssignmentAction.cls</td>
+         <td>5</td>
+         <td>Case Fields, Assignment Rules</td>
+      </tr>
+      <tr>
+         <td>ChangeStatusGanttController.cls</td>
+         <td>1</td>
+         <td>ServiceResource &amp; ServiceTerritory Fields</td>
+      </tr>
+      <tr>
+         <td>changeTaskOwner.cls</td>
+         <td>3</td>
+         <td>Task Fields, Record Types</td>
+      </tr>
+      <tr>
+         <td>CHAT_ErrorHandler.cls</td>
+         <td>4</td>
+         <td>CHAT_ID__c Fields, Error Logs</td>
+      </tr>
+      <tr>
+         <td>CHAT_FetchPSARecords.cls</td>
+         <td>5</td>
+         <td>Opportunity Fields, External ID References</td>
+      </tr>
+      <tr>
+         <td>CHAT_InboundChatterFeedComment.cls</td>
+         <td>4</td>
+         <td>FeedItem, FeedComment Fields</td>
+      </tr>
+      <tr>
+         <td>CHAT_InboundChatterFeedItem.cls</td>
+         <td>5</td>
+         <td>FeedItem Fields, Chatter Group Mappings</td>
+      </tr>
+      <tr>
+         <td>CHAT_InboundChatterGroup.cls</td>
+         <td>10</td>
+         <td>CollaborationGroup, User Fields</td>
+      </tr>
+      <tr>
+         <td>CHAT_InboundChatterGroupMember.cls</td>
+         <td>9</td>
+         <td>CollaborationGroupMember Fields, FederationIdentifier</td>
+      </tr>
+      <tr>
+         <td>CHAT_OutboundChatterGroupMember.cls</td>
+         <td>5</td>
+         <td>GroupMember Fields, Integration Config</td>
+      </tr>
+      <tr>
+         <td>CHAT_OutboundFeedComment.cls</td>
+         <td>5</td>
+         <td>FeedComment Fields, Custom Permissions</td>
+      </tr>
+      <tr>
+         <td>CHAT_OutboundFeedItem.cls</td>
+         <td>4</td>
+         <td>FeedItem Fields, Record Visibility</td>
+      </tr>
+      <tr>
+         <td>CHAT_UserSyncAPI.cls</td>
+         <td>6</td>
+         <td>User Fields, User Provisioning Settings</td>
+      </tr>
+      <tr>
+         <td>CHAT_Utility.cls</td>
+         <td>10</td>
+         <td>Various Standard Object Fields, Utility Classes</td>
+      </tr>
+      <tr>
+         <td>CloneSeatAttributes.cls</td>
+         <td>5</td>
+         <td>Seat_Attributes__c Fields, Record Types</td>
+      </tr>
+      <tr>
+         <td>ConfigureAddresRoles_cls.cls</td>
+         <td>2</td>
+         <td>Opportunity &amp; Address Role Fields</td>
+      </tr>
+      <tr>
+         <td>CongaAPICalloutHelper.cls</td>
+         <td>13</td>
+         <td>Error_Log__c, WorkOrderLineItem Fields</td>
+      </tr>
+      <tr>
+         <td>congaDocumentGeneration.cls</td>
+         <td>7</td>
+         <td>APXTConga4__Conga_Template__c Fields, Templates</td>
+      </tr>
+      <tr>
+         <td>CongaDocumentGenerator.cls</td>
+         <td>6</td>
+         <td>Conga Template Fields, Document Generation Settings</td>
+      </tr>
+      <tr>
+         <td>CongaTemplateMappingTriggerHelper.cls</td>
+         <td>2</td>
+         <td>Conga_Template_Mapping__c Fields</td>
+      </tr>
+      <tr>
+         <td>ContactMethods.cls</td>
+         <td>6</td>
+         <td>Contact Fields, Communication Preferences</td>
+      </tr>
+      <tr>
+         <td>customDeleteQuoteExtension.cls</td>
+         <td>4</td>
+         <td>cafsl__Oracle_Quote__c Fields, Deletion Logic</td>
+      </tr>
+      <tr>
+         <td>DeleteCases.cls</td>
+         <td>5</td>
+         <td>Case Fields, Deletion Permissions</td>
+      </tr>
+      <tr>
+         <td>DigitalContentController.cls</td>
+         <td>7</td>
+         <td>Digital_Content__c Fields, Content Access Controls</td>
+      </tr>
+      <tr>
+         <td>DisplayNonConformanceData.cls</td>
+         <td>23</td>
+         <td>Dispute__c, Non_Conformance__c Fields, Validation Logic</td>
+      </tr>
+      <tr>
+         <td>DisputeTriggerHelper.cls</td>
+         <td>8</td>
+         <td>Dispute__c Fields, Trigger Settings</td>
+      </tr>
+      <tr>
+         <td>EmailMessageHelper.cls</td>
+         <td>2</td>
+         <td>EmailMessage Fields, Templates</td>
+      </tr>
+      <tr>
+         <td>ErrorLogsHandler.cls</td>
+         <td>1</td>
+         <td>Error_Log__c Fields</td>
+      </tr>
+      <tr>
+         <td>FileVolumeCCNTriggerHelper.cls</td>
+         <td>2</td>
+         <td>ContentVersion Fields, Trigger Handling</td>
+      </tr>
+      <tr>
+         <td>findNCNotVoided.cls</td>
+         <td>2</td>
+         <td>Non_Conformance__c Fields, Filters</td>
+      </tr>
+      <tr>
+         <td>FutureServiceAppointment.cls</td>
+         <td>4</td>
+         <td>ServiceAppointment Fields, Scheduling Settings</td>
+      </tr>
+      <tr>
+         <td>GMPJsonClass.cls</td>
+         <td>6</td>
+         <td>JSON Configurations, External IDs</td>
+      </tr>
+      <tr>
+         <td>HTTPCalloutService.cls</td>
+         <td>3</td>
+         <td>Integration Metadata, Named Credentials</td>
+      </tr>
+      <tr>
+         <td>invokeCaseAssignmentRules.cls</td>
+         <td>3</td>
+         <td>Case Fields, Assignment Rules</td>
+      </tr>
+      <tr>
+         <td>InvokeChangetaskOwner.cls</td>
+         <td>3</td>
+         <td>Task Fields, Owner Assignment Logic</td>
+      </tr>
+      <tr>
+         <td>LeadHelper.cls</td>
+         <td>1</td>
+         <td>Lead Fields, Conversion Settings</td>
+      </tr>
+      <tr>
+         <td>LeadTriggerHandler.cls</td>
+         <td>2</td>
+         <td>Lead Fields, Trigger Handling</td>
+      </tr>
+      <tr>
+         <td>LegalEntityController.cls</td>
+         <td>5</td>
+         <td>Legal_Entity__c Fields, Opportunity Legal Info</td>
+      </tr>
+      <tr>
+         <td>MergeRequestHandler.cls</td>
+         <td>6</td>
+         <td>Credit_Limit__c Fields, Merge Logic</td>
+      </tr>
+      <tr>
+         <td>MyProfilePageController.cls</td>
+         <td>7</td>
+         <td>User Fields, Profile Page Layouts</td>
+      </tr>
+      <tr>
+         <td>NCOnSPGController.cls</td>
+         <td>2</td>
+         <td>Non_Conformance__c Fields, SPG Config</td>
+      </tr>
+      <tr>
+         <td>nonConformanceDisputeCreation.cls</td>
+         <td>12</td>
+         <td>Non_Conformance__c, Dispute__c Fields, Validation Rules</td>
+      </tr>
+      <tr>
+         <td>NonConformanceOnServiceProfile.cls</td>
+         <td>2</td>
+         <td>Non_Conformance__c Fields, Service_Profile__c Link</td>
+      </tr>
+      <tr>
+         <td>NonConformanceTriggerHelper.cls</td>
+         <td>25</td>
+         <td>Non_Conformance__c Fields, Complex Trigger Logic</td>
+      </tr>
+      <tr>
+         <td>NotificationFlowHandlerToSendEmail.cls</td>
+         <td>1</td>
+         <td>Custom Notification Objects, Flow Config</td>
+      </tr>
+      <tr>
+         <td>OpportunityContactRoleHandler.cls</td>
+         <td>2</td>
+         <td>OpportunityContactRole Fields, Sharing Settings</td>
+      </tr>
+      <tr>
+         <td>OpportunityHelper.cls</td>
+         <td>1</td>
+         <td>Opportunity Fields, Helper Methods</td>
+      </tr>
+      <tr>
+         <td>OpportunityLineItemHelper.cls</td>
+         <td>3</td>
+         <td>OpportunityLineItem Fields, Pricing Logic</td>
+      </tr>
+      <tr>
+         <td>OpportunityTriggerHandler.cls</td>
+         <td>7</td>
+         <td>Opportunity Fields, Trigger Conditions</td>
+      </tr>
+      <tr>
+         <td>OppRelatedAccounts.cls</td>
+         <td>10</td>
+         <td>Opportunity_Related_Accounts__c Fields, Account Linking</td>
+      </tr>
+      <tr>
+         <td>OverrideDefaultServiceTerritory.cls</td>
+         <td>10</td>
+         <td>ServiceTerritory Fields, Territory Overrides</td>
+      </tr>
+      <tr>
+         <td>PreviewWorkPlanController.cls</td>
+         <td>2</td>
+         <td>WorkPlan Fields, Preview Configurations</td>
+      </tr>
+      <tr>
+         <td>ProgramTriggerHelper.cls</td>
+         <td>3</td>
+         <td>Program__c Fields, Trigger Logic</td>
+      </tr>
+      <tr>
+         <td>PurchasedItemTriggerhandler.cls</td>
+         <td>5</td>
+         <td>Purchased_Item__c, Newsletter__c Fields, Trigger Updates</td>
+      </tr>
+      <tr>
+         <td>RelatedResourceTriggerHelper.cls</td>
+         <td>3</td>
+         <td>Related_Resource__c Fields, Access Rules</td>
+      </tr>
+      <tr>
+         <td>ReqResourceOnWOFromSPG.cls</td>
+         <td>5</td>
+         <td>WorkOrderLineItem Fields, Resource Assignment</td>
+      </tr>
+      <tr>
+         <td>ResourcePreferenceTriggerHelper.cls</td>
+         <td>6</td>
+         <td>Resource_Preference__c Fields, Preference Logic</td>
+      </tr>
+      <tr>
+         <td>RetrieveSAonAccountController.cls</td>
+         <td>3</td>
+         <td>ServiceAppointment Fields, Account Linking</td>
+      </tr>
+      <tr>
+         <td>ReviewAndApprovalTriggerHelper.cls</td>
+         <td>2</td>
+         <td>Review_Approval_Process__c Fields, Approval Logic</td>
+      </tr>
+      <tr>
+         <td>RunAssignmentRules.cls</td>
+         <td>2</td>
+         <td>Case Fields, Assignment Rule Execution</td>
+      </tr>
+      <tr>
+         <td>scheduledAppointmentsController.cls</td>
+         <td>2</td>
+         <td>ServiceAppointment Fields, Scheduling UI</td>
+      </tr>
+      <tr>
+         <td>SendDeliverable.cls</td>
+         <td>10</td>
+         <td>Delivery SObject Fields, Custom Permissions</td>
+      </tr>
+      <tr>
+         <td>SendEmailWithCC.cls</td>
+         <td>1</td>
+         <td>EmailMessage Fields, Send Logic</td>
+      </tr>
+      <tr>
+         <td>SendPendingApprovalMail.cls</td>
+         <td>3</td>
+         <td>EmailMessage Fields, Approval Notifications</td>
+      </tr>
+      <tr>
+         <td>ServiceAppointmentTriggerHelper.cls</td>
+         <td>8</td>
+         <td>ServiceAppointment Fields, Complex Trigger Conditions</td>
+      </tr>
+      <tr>
+         <td>ServiceProfileGroupModule.cls</td>
+         <td>3</td>
+         <td>Service_Profile_Group__c Fields, Group Config</td>
+      </tr>
+      <tr>
+         <td>ServiceProfileGroupModuleV2.cls</td>
+         <td>4</td>
+         <td>Service_Profile_Group__c Fields (v2), Enhanced Config</td>
+      </tr>
+      <tr>
+         <td>serviceProfileMobileListViewController.cls</td>
+         <td>1</td>
+         <td>Service_Profile Fields, Mobile Views</td>
+      </tr>
+      <tr>
+         <td>ServiceProfileTriggerHelper.cls</td>
+         <td>5</td>
+         <td>Service_Profile__c Fields, Trigger Logic</td>
+      </tr>
+      <tr>
+         <td>ServiceResourceSkillsTriggerHelper.cls</td>
+         <td>5</td>
+         <td>ServiceResourceSkill Fields, Skill Assignments</td>
+      </tr>
+      <tr>
+         <td>ServiceTerritoryMappings.cls</td>
+         <td>3</td>
+         <td>ServiceTerritory Mapping Fields, Territory Settings</td>
+      </tr>
+      <tr>
+         <td>SkillRequirementTriggerHelper.cls</td>
+         <td>10</td>
+         <td>SkillRequirement Fields, Requirement Logic</td>
+      </tr>
+      <tr>
+         <td>SynergyAzureB2CRegHandler.cls</td>
+         <td>4</td>
+         <td>User Fields, Azure B2C Integration</td>
+      </tr>
+      <tr>
+         <td>SynergySyncPlatformEventPublisher.cls</td>
+         <td>2</td>
+         <td>Platform Event Metadata, Sync Config</td>
+      </tr>
+      <tr>
+         <td>TaskRoutingContainerComponentController.cls</td>
+         <td>2</td>
+         <td>Task_Creation__mdt Fields, Routing Config</td>
+      </tr>
+      <tr>
+         <td>TaskTriggerHandler.cls</td>
+         <td>5</td>
+         <td>Task Fields, Trigger Conditions</td>
+      </tr>
+      <tr>
+         <td>TaskTriggerHelper.cls</td>
+         <td>5</td>
+         <td>Task Fields, Helper Logic</td>
+      </tr>
+      <tr>
+         <td>Territory2Helper.cls</td>
+         <td>8</td>
+         <td>Territory2 Fields, Assignment Logic</td>
+      </tr>
+      <tr>
+         <td>Territory2TriggerHandler.cls</td>
+         <td>1</td>
+         <td>Territory2 Fields, Trigger Execution</td>
+      </tr>
+      <tr>
+         <td>UserTerritory2AssociationHandler.cls</td>
+         <td>3</td>
+         <td>UserTerritory2Association Fields, Sharing Logic</td>
+      </tr>
+      <tr>
+         <td>UserTerritory2AssociationHelper.cls</td>
+         <td>3</td>
+         <td>UserTerritory2Association Fields, Helper Methods</td>
+      </tr>
+      <tr>
+         <td>Woli_ECM_Plugin_Helper.cls</td>
+         <td>3</td>
+         <td>ECM Plugin Fields, External Integration Config</td>
+      </tr>
+      <tr>
+         <td>WOLISelectionController.cls</td>
+         <td>1</td>
+         <td>WorkOrderLineItem Fields, Selection Logic</td>
+      </tr>
+      <tr>
+         <td>WorkOrderLineItemTriggerHelper.cls</td>
+         <td>10</td>
+         <td>WorkOrderLineItem Fields, Complex Trigger Conditions</td>
+      </tr>
+      <tr>
+         <td>WorkOrderTriggerHelper.cls</td>
+         <td>8</td>
+         <td>WorkOrder Fields, Trigger Conditions</td>
+      </tr>
+      <tr>
+         <td>WorkPlanTriggerHelper.cls</td>
+         <td>1</td>
+         <td>WorkPlan Fields, Plan Level Config</td>
+      </tr>
+      <tr>
+         <td>WorkStepAutofillRefreshModule.cls</td>
+         <td>3</td>
+         <td>WorkStep Fields, Autofill Logic</td>
+      </tr>
+      <tr>
+         <td>WorkStepCreationModule.cls</td>
+         <td>4</td>
+         <td>WorkStep Fields, Creation Logic</td>
+      </tr>
+      <tr>
+         <td>XECMFacade.cls</td>
+         <td>2</td>
+         <td>ContentDocument Fields, XECM Integration Settings</td>
+      </tr>
+   </tbody>
+</table>
+<h3>Appendix B: Detailed Violation Tables</h3>
+<h4>Table 3: Missing FLS Checks</h4>
+<table>
+   <thead>
+      <tr>
+         <th>File</th>
+         <th>Line(s)</th>
+         <th>Object</th>
+         <th>Fields Accessed Without FLS Checks</th>
+         <th>Operation</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>AddressRolesController.cls</td>
+         <td>37-41</td>
+         <td>Opportunity</td>
+         <td>AccountId, Amount, CloseDate, CurrencyIsoCode, IsPrivate, Split_Billing_Opp__c</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>MyProfilePageController.cls</td>
+         <td>35</td>
+         <td>User</td>
+         <td>FirstName, LastName, Email</td>
+         <td>UPDATE</td>
+      </tr>
+      <tr>
+         <td>capaResponseFormController.cls</td>
+         <td>32-87</td>
+         <td>Dispute__c</td>
+         <td>Status__c, Assigned_To_POW__c, Requested_Dispute_Outcome__c, Non_Conformance_ID__c</td>
+         <td>READ/UPDATE</td>
+      </tr>
+      <tr>
+         <td>capaResponseFormController.cls</td>
+         <td>100-120</td>
+         <td>Non_Conformance__c</td>
+         <td>Status__c, Corrective_Action_Reviewer__c</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>NonConformanceTriggerHelper.cls</td>
+         <td>80-110</td>
+         <td>Non_Conformance__c</td>
+         <td>Prior_NC_Status__c, Non_Conformance_Number__c, Assigned_To_POW__c</td>
+         <td>UPDATE</td>
+      </tr>
+      <tr>
+         <td>OppRelatedAccounts.cls</td>
+         <td>6-27</td>
+         <td>Opportunity</td>
+         <td>AccountId, Name, StageName (fetched without checks)</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>OppRelatedAccounts.cls</td>
+         <td>30-40</td>
+         <td>Account</td>
+         <td>Account_Address__c</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>DigitalContentController.cls</td>
+         <td>15-29</td>
+         <td>Digital_Content__c</td>
+         <td>Asset_File_Name__c, Asset_Link__c, Asset_Name__c</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>DisplayNonConformanceData.cls</td>
+         <td>95-120</td>
+         <td>Dispute__c</td>
+         <td>Describe_Justification__c, Dispute_Results__c, Status__c, Submitter__c, Submitter_Account__c</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>DisplayNonConformanceData.cls</td>
+         <td>140-165</td>
+         <td>Non_Conformance__c</td>
+         <td>Non_Conformance_Number__c, Status__c, Assigned_To_POC_Name__c</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>NonConformanceOnServiceProfile.cls</td>
+         <td>8-15</td>
+         <td>Non_Conformance__c</td>
+         <td>NC_Name__c, Work_Order_Line_Item_Name__c</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>CloneSeatAttributes.cls</td>
+         <td>98-123</td>
+         <td>Seat_Attributes__c</td>
+         <td>Catalog_Industry__c, Coverage_Type__c, Territory_Model_Seat_Unique_ID__c</td>
+         <td>READ/INSERT</td>
+      </tr>
+      <tr>
+         <td>LegalEntityController.cls</td>
+         <td>31-42</td>
+         <td>Legal_Entity__c</td>
+         <td>Name, CurrencyIsoCode</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>LegalEntityController.cls</td>
+         <td>70-90</td>
+         <td>Opportunity</td>
+         <td>Legal_Entity__c (no FLS check)</td>
+         <td>UPDATE</td>
+      </tr>
+      <tr>
+         <td>ContactMethods.cls</td>
+         <td>20-28</td>
+         <td>Contact</td>
+         <td>Email, Phone (retrieved without checks)</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>CHAT_InboundChatterFeedComment.cls</td>
+         <td>22-49</td>
+         <td>CHAT_ID__c</td>
+         <td>External_ID__c, Record_Id__c</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>CHAT_InboundChatterGroup.cls</td>
+         <td>33-48</td>
+         <td>User</td>
+         <td>FederationIdentifier, IsActive</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>CHAT_InboundChatterGroup.cls</td>
+         <td>48-60</td>
+         <td>User (Insert)</td>
+         <td>Email, EmailEncodingKey, LanguageLocaleKey, LastName, Username</td>
+         <td>INSERT</td>
+      </tr>
+      <tr>
+         <td>CHAT_UserSyncAPI.cls</td>
+         <td>54-85</td>
+         <td>User</td>
+         <td>FederationIdentifier, Email</td>
+         <td>UPDATE</td>
+      </tr>
+      <tr>
+         <td>ServiceTerritoryMappings.cls</td>
+         <td>147-160</td>
+         <td>ServiceTerritory</td>
+         <td>Name, TerritoryType, ParentTerritory (not checked)</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>SkillRequirementTriggerHelper.cls</td>
+         <td>43-65</td>
+         <td>SkillRequirement</td>
+         <td>SkillLevel, ResourceName__c</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>TaskRoutingContainerComponentController.cls</td>
+         <td>109-121</td>
+         <td>Task_Creation__mdt</td>
+         <td>Task_Name__c, Subject__c (no checks)</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>WorkOrderLineItemTriggerHelper.cls</td>
+         <td>74-107</td>
+         <td>WorkOrderLineItem</td>
+         <td>Status, Service_Profile__c</td>
+         <td>UPDATE</td>
+      </tr>
+      <tr>
+         <td>WorkOrderTriggerHelper.cls</td>
+         <td>45-92</td>
+         <td>WorkOrder</td>
+         <td>Status, Subject, CreatedDate</td>
+         <td>READ</td>
+      </tr>
+      <tr>
+         <td>XECMFacade.cls</td>
+         <td>70-100</td>
+         <td>ContentDocument</td>
+         <td>Title, FileType without checks</td>
+         <td>READ</td>
+      </tr>
+   </tbody>
+</table>
+<h4>Table 4: Missing CRUD Checks</h4>
+<table>
+   <thead>
+      <tr>
+         <th>File</th>
+         <th>Line(s)</th>
+         <th>Object</th>
+         <th>Operation</th>
+         <th>Missing Check</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>DeleteCases.cls</td>
+         <td>15</td>
+         <td>Case</td>
+         <td>DELETE</td>
+         <td>isDeletable() not checked</td>
+      </tr>
+      <tr>
+         <td>CHAT_InboundChatterFeedComment.cls</td>
+         <td>19,24</td>
+         <td>FeedItem, FeedComment</td>
+         <td>DELETE</td>
+         <td>isDeletable() not checked</td>
+      </tr>
+      <tr>
+         <td>customDeleteQuoteExtension.cls</td>
+         <td>34</td>
+         <td>cafsl__Oracle_Quote__c</td>
+         <td>DELETE</td>
+         <td>isDeletable() not checked</td>
+      </tr>
+      <tr>
+         <td>DisplayNonConformanceData.cls</td>
+         <td>86</td>
+         <td>ContentDocument</td>
+         <td>DELETE</td>
+         <td>isDeletable() not checked</td>
+      </tr>
+      <tr>
+         <td>CaseAssignmentAction.cls</td>
+         <td>25</td>
+         <td>Case</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>OpportunityTriggerHandler.cls</td>
+         <td>99,178</td>
+         <td>Opportunity</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>LeadTriggerHandler.cls</td>
+         <td>13</td>
+         <td>Lead</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>OppRelatedAccounts.cls</td>
+         <td>39,51</td>
+         <td>Opportunity_Related_Accounts__c</td>
+         <td>INSERT/UPDATE</td>
+         <td>isCreateable()/isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>BatchPopulatePrimaryContactRoleId.cls</td>
+         <td>27,36</td>
+         <td>Opportunity</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>CHAT_UserSyncAPI.cls</td>
+         <td>85</td>
+         <td>User</td>
+         <td>INSERT</td>
+         <td>isCreateable() not checked</td>
+      </tr>
+      <tr>
+         <td>DigitalContentController.cls</td>
+         <td>6,22</td>
+         <td>Digital_Content__c</td>
+         <td>INSERT, DELETE</td>
+         <td>isCreateable()/isDeletable() not checked</td>
+      </tr>
+      <tr>
+         <td>NotificationFlowHandlerToSendEmail.cls</td>
+         <td>4,36</td>
+         <td>SObject (Custom)</td>
+         <td>DELETE/UPDATE</td>
+         <td>Not checked via Schema methods</td>
+      </tr>
+      <tr>
+         <td>NonConformanceTriggerHelper.cls</td>
+         <td>128,275</td>
+         <td>Non_Conformance__c</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>PurchasedItemTriggerhandler.cls</td>
+         <td>77,93</td>
+         <td>Newsletter__c, Purchased_Item__c</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>ResourcePreferenceTriggerHelper.cls</td>
+         <td>40,51</td>
+         <td>Resource_Preference__c</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>ServiceAppointmentTriggerHelper.cls</td>
+         <td>Multiple lines</td>
+         <td>ServiceAppointment</td>
+         <td>UPDATE, DELETE</td>
+         <td>Not checked via Schema methods</td>
+      </tr>
+      <tr>
+         <td>ServiceProfileTriggerHelper.cls</td>
+         <td>14,201</td>
+         <td>Service_Profile__c</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>SkillRequirementTriggerHelper.cls</td>
+         <td>Multiple</td>
+         <td>SkillRequirement, ServiceResource</td>
+         <td>INSERT/UPDATE/DELETE</td>
+         <td>Not checked via Schema methods</td>
+      </tr>
+      <tr>
+         <td>WorkOrderLineItemTriggerHelper.cls</td>
+         <td>126,271</td>
+         <td>WorkOrderLineItem</td>
+         <td>UPDATE, DELETE</td>
+         <td>isUpdateable()/isDeletable() not checked</td>
+      </tr>
+      <tr>
+         <td>WorkOrderTriggerHelper.cls</td>
+         <td>68,92,99</td>
+         <td>WorkOrder</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>XECMFacade.cls</td>
+         <td>70</td>
+         <td>ContentDocument</td>
+         <td>DELETE</td>
+         <td>isDeletable() not checked</td>
+      </tr>
+      <tr>
+         <td>AssignedResourceTriggerHelper.cls</td>
+         <td>31,79</td>
+         <td>AssignedResource__c</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>CHAT_OutboundChatterGroupMember.cls</td>
+         <td>23,59</td>
+         <td>CollaborationGroupMember</td>
+         <td>INSERT/DELETE</td>
+         <td>isCreateable()/isDeletable() not checked</td>
+      </tr>
+      <tr>
+         <td>CongaAPICalloutHelper.cls</td>
+         <td>27,296</td>
+         <td>Error_Log__c, WOLI__c</td>
+         <td>INSERT/UPDATE</td>
+         <td>isCreateable()/isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>congaDocumentGeneration.cls</td>
+         <td>33,161</td>
+         <td>APXTConga4__Conga_Template__c</td>
+         <td>UPDATE</td>
+         <td>isUpdateable() not checked</td>
+      </tr>
+      <tr>
+         <td>MergeRequestHandler.cls</td>
+         <td>69,213</td>
+         <td>Credit_Limit__c</td>
+         <td>DELETE/UPDATE</td>
+         <td>Not checked via Schema methods</td>
+      </tr>
+   </tbody>
+</table>
+<h3>Appendix C: Code Snippets with Violations and Fixes</h3>
+<p> 
+   <strong>Example 1: Missing FLS Check</strong></p>
+<p> 
+   <em>Violation:</em></p>
+<pre>   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   <code>// AddressRolesController.cls - Line 37
+Opportunity opp = [SELECT AccountId, Amount, CloseDate FROM Opportunity WHERE Id = :oppId];
+</code></pre>
+<p> 
+   <em>Fix:</em></p>
+<pre>   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   <code>// Check FLS before querying
+if (Schema.sObjectType.Opportunity.fields.AccountId.isAccessible() &amp;&amp; 
+    Schema.sObjectType.Opportunity.fields.Amount.isAccessible() &amp;&amp; 
+    Schema.sObjectType.Opportunity.fields.CloseDate.isAccessible()) {
+    
+    Opportunity opp = [SELECT AccountId, Amount, CloseDate FROM Opportunity WHERE Id = :oppId];
+} else {
+    // Handle lack of field access
+}
+</code></pre>
+<p> 
+   <strong>Example 2: Missing CRUD Check</strong></p>
+<p> 
+   <em>Violation:</em></p>
+<pre>   
+   
+   
+   
+   
+   
+   
+   <code>// DeleteCases.cls - Line 15
+delete caseList;
+</code></pre>
+<p> 
+   <em>Fix:</em></p>
+<pre>   
+   
+   
+
+   
+   
+   
+   
+   
+   <code>// Check CRUD before deleting
+if (Schema.sObjectType.Case.isDeletable()) {
+    delete caseList;
+} else {
+    // Handle lack of delete permission
+}
+</code></pre>
+<p> 
+   <strong>Example 3: Missing Sharing Declaration</strong></p>
+<p> 
+   <em>Violation:</em></p>
+<pre>   
+   
+   
+   
+   
+   
+   <code>// BatchPopulatePrimaryContactRoleId.cls
+public class BatchPopulatePrimaryContactRoleId implements Database.Batchable {
+    // Class code
+}
+</code></pre>
+<p> 
+   <em>Fix:</em></p>
+<pre>   
+   
+ 
+   
+   
+   
+   
+   <code>// Add &#39;with sharing&#39;
+public with sharing class BatchPopulatePrimaryContactRoleId implements Database.Batchable {
+    // Class code
+}
+</code></pre>
+<h3>Appendix D: References</h3>
+<ol>
+   <li> 
+      <strong>Salesforce Developer Documentation</strong>
+      <ul>
+         <li> 
+            <a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_perms_enforcing.htm">Enforcing CRUD and FLS</a></li>
+         <li> 
+            <a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_keywords_sharing.htm">Using the with sharing or without sharing Keywords</a></li>
+         <li> 
+            <a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_exception_handling.htm">Apex Exception Handling</a></li>
+         <li> 
+            <a href="https://developer.salesforce.com/forums/?id=906F00000009CjlIAE">Apex Code Best Practices</a></li>
+      </ul>
+   </li>
+   <li> 
+      <strong>Trailhead Modules</strong>
+      <ul>
+         <li> 
+            <a href="https://trailhead.salesforce.com/content/learn/modules/apex_security_and_sharing">Apex Security and Sharing</a></li>
+         <li> 
+            <a href="https://trailhead.salesforce.com/content/learn/modules/data_security">Data Security</a></li>
+      </ul> 
+      <br/> 
+   </li>
+</ol>
+<p> 
+   <strong>End of Document</strong></p>
