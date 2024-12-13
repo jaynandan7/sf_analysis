@@ -216,7 +216,7 @@ pre code {
    </li>
 </ul>
 <p>These issues pose significant risks to data security and integrity, potentially leading to unauthorized data access and manipulation. Immediate remediation is recommended to align the codebase with Salesforce security best practices.</p>
-<h2>Critical Development Patterns - Summary Table</h2>
+<h2>Critical Dev Patterns</h2>
 <table>
    <tbody>
       <tr>
@@ -459,7 +459,6 @@ delete feedItems;
       <pre>         
          
 
-         
          <code>public class SendEmailWithCC {
     // No &#39;with sharing&#39; declaration
 }
@@ -473,9 +472,7 @@ delete feedItems;
       <code>with sharing</code>: 
       <pre>         
          
-         
- 
-         
+    
          
          <code>public with sharing class BatchPopulatePrimaryContactRoleId implements Database.Batchable&lt;SObject&gt; {
     // Class implementation
@@ -535,7 +532,6 @@ delete feedItems;
       <pre>         
          
 
-         
          
          <code>ClassCastException: class com.salesforce.graph.vertex.DefaultVertex cannot be cast 
 to class com.salesforce.graph.vertex.VariableExpressionVertex
@@ -798,7 +794,7 @@ to class com.salesforce.graph.vertex.VariableExpressionVertex
       </li>
    </ul>
    <h4> 
-      <strong>2. Defect Register (Potential Defects Identified)</strong></h4>
+      <strong>2. Defect Register (Potential Defects lib)</strong></h4>
    <table border="1" cellpadding="5" cellspacing="0">
       <thead>
          <tr>
@@ -940,14 +936,7 @@ to class com.salesforce.graph.vertex.VariableExpressionVertex
          </tr>
       </tbody>
    </table>
-   <p> 
-      <strong>Additional Notes:</strong></p>
-   <ul>
-      <li> 
-         <em>Impact and Priority Rationale:</em> High-priority defects typically involve security risks (uncontrolled data exposure, no CRUD/FLS checks) or compliance issues. Medium priority defects concern maintainability and scalability.</li>
-      <li> 
-         <em>Tracking and Resolution:</em> Each defect should be tracked in a defect management system. Over time, improvements can be measured by KPIs such as test coverage increases, reduction in hardcoded logic, and fewer data access incidents.</li>
-   </ul>
+  
    <p>This defect list provides a starting point for a remediation roadmap, ensuring that all identified issues from the code analysis are documented, prioritized, and addressed.</p>
    <h4>3. Adopt Persona-Based Security Design </h4>
    <p>Based on Security design patterns, we can enhance our current security architecture by leveraging Profiles, Personas, Permission Sets, and Permission Set Groups in a layered approach. This model reduces redundancy, improves scalability, and simplifies maintenance by separating system-level permissions from field and object access, and by using personas to define more granular access.</p>
